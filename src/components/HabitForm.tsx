@@ -1,12 +1,15 @@
 import { useState, type SubmitEvent } from "react";
 import { Button } from "./Button";
+import { useHabits } from "../context/useHabits";
 
 export function HabitForm() {
     const [name, setName] = useState("");
+    const { addHabit } = useHabits();
 
     function handleSubmit(e: SubmitEvent) {
         if (name.trim() === "") return;
         setName("");
+        addHabit(name);
 
         e.preventDefault();
     }
