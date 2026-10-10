@@ -1,27 +1,28 @@
 import { isSameDay } from "date-fns";
-import { useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { HabitContext, type Habit } from "./useHabits";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 type HabitProviderProps = {
     children: ReactNode;
 };
 
 export function HabitProvider({ children }: HabitProviderProps) {
-    const [habits, setHabits] = useState<Habit[]>([]);
+    const [habits, setHabits] = useLocalStorage<Habit[]>("Habits", []);
 
     function addHabit(name: string) {
-        setHabits((curr) => [
+        setHabits((curr: Habit[]) => [
             ...curr,
             { id: crypto.randomUUID(), name, completions: [] },
         ]);
     }
 
     function deleteHabit(id: string) {
-        setHabits((curr) => curr.filter((h) => h.id !== id));
+        setHabits((curr: Habit[]) => curr.filter((h) => h.id !== id));
     }
 
     function toggleHabit(id: string, date: Date) {
-        setHabits((curr) =>
+        setHabits((curr: Habit[]) =>
             curr.map((h) => {
                 if (h.id !== id) return h;
 
